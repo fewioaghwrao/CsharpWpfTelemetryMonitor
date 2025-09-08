@@ -1,0 +1,17 @@
+﻿<Window x:Class="WpfApp.Views.LogsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp.Views"
+        mc:Ignorable="d"
+        Background="LightGray"
+        Title="動作ログ" Height="400" Width="640">
+    <DockPanel Margin="12">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
+            <TextBlock Text="アプリの動作ログを表示します。ログクリアボタンでログを全消去できます。※パスワードが必要です。" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+            <Button Content="ログクリア" Width="100" Click="ClearLogs_Click" FontSize="14" Background="white"/>
+        </StackPanel>
+        <ListView ItemsSource="{Binding LogLines}" Foreground="Black" Background="White" />
+    </DockPanel>
+</Window>

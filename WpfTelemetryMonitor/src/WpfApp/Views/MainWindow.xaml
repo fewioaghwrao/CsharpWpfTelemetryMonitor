@@ -1,0 +1,98 @@
+﻿<Window x:Class="WpfApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        mc:Ignorable="d"
+        Background="LightGray"
+        Title="センサー監視シミュレーション" Height="540" Width="980">
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="ファイル">
+                    <MenuItem Header="エクスポート (CSV)"
+                          Command="{Binding ExportCsvCommand}"/>
+                    <MenuItem Header="終了 (Alt+F4)"
+                  Command="ApplicationCommands.Close" />
+                </MenuItem>
+                <MenuItem Header="表示">
+                    <MenuItem Header="設定" Click="OpenSettings_Click" />
+                    <MenuItem Header="動作ログ" Click="OpenLogs_Click" />
+                    <MenuItem Header="計測ログ" Click="OpenMeasureLogs_Click" />
+                </MenuItem>
+            </Menu>
+
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- 2カラム（左：リスト、右：グラフ） -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 左：コントロール群＋リスト -->
+                    <DockPanel Grid.Column="0" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
+                            <TextBlock Text="装置名:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="14"/>
+                            <TextBlock Text="{Binding DeviceId}"  Width="80" FontWeight="Bold" Margin="0,0,16,0" VerticalAlignment="Center" Background="White" FontSize="14"/>
+                            <Button Content="開始" Width="80" Command="{Binding StartCommand}" Margin="0,0,8,0" Background="LightGreen" Foreground="Black" FontSize="14"/>
+                            <Button Content="停止" Width="80" Command="{Binding StopCommand}" Margin="0,0,8,0" Background="Red" Foreground="White" FontSize="14"/>
+                            <TextBlock Text="閾値:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="14"/>
+                            <TextBlock Text="{Binding AlertThreshold}" Width="50" FontWeight="Bold" Margin="0,0,16,0" VerticalAlignment="Center" Background="White" Foreground="Black" FontSize="14"/>
+                        </StackPanel>
+
+                        <ListView ItemsSource="{Binding Readings}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="日時"
+                                    DisplayMemberBinding="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="180"/>
+                                    <GridViewColumn Header="計測値"
+                                    DisplayMemberBinding="{Binding Value, StringFormat={}{0:F2}}" Width="100"/>
+                                    <GridViewColumn Header="装置名"
+                                    DisplayMemberBinding="{Binding DeviceId}" Width="120"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+
+                    <!-- 右：OxyPlot -->
+                    <DockPanel Grid.Column="1" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
+                            <TextBlock Text="{Binding Status}" VerticalAlignment="Center" FontStyle="Italic" 
+                                   Background="Black" Foreground="White" Margin="0,0,8,0" FontSize="14"
+                                    Width="350"/>
+                            <Button x:Name="Explanation" Content="概要説明(音声あり)" Width="100"  Click="OnSpeakButtonClick" Margin="0,0,8,0" Background="Blue" Foreground="white" FontSize="10"/>
+                        </StackPanel>
+                        <oxy:PlotView Model="{Binding PlotModel}" />
+                    </DockPanel>
+                </Grid>
+
+                <!-- 下部ステータス -->
+                <TextBlock Grid.Row="2" Text="2025" FontStyle="Italic" Background="Transparent" Foreground="Black"/>
+            </Grid>
+        </DockPanel>
+        <TextBlock x:Name="OverlayLabel"
+               Text="センサー監視シミュレーションの概要&#x0D;&#x0A;こちらは1秒ごとの仮想の計測値を左にリストアップし、&#x0D;&#x0A;右のグラフにてプロットするものとなっております。&#x0D;&#x0A;開始ボタンでサンプリング開始、停止ボタンでサンプリング停止となります。&#x0D;&#x0A;左のリストには計測した日時、計測値、装置名がリストアップされます。&#x0D;&#x0A;右のグラフの横軸は時間、縦軸は計測値で最近の１００秒間の値を表示します。&#x0D;&#x0A;グラフの赤色は閾値、青色は計測値となります。"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               Margin="0,105,0,0"
+               Padding="8,4"
+               Background="#AA000000"
+               Foreground="White"
+               FontWeight="Bold"
+               Panel.ZIndex="10"
+               Visibility="Collapsed"
+                   FontSize="20"
+               IsHitTestVisible="False"/>
+
+    </Grid>
+</Window>
+
+

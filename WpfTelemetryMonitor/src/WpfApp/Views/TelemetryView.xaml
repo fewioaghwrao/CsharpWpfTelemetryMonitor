@@ -1,0 +1,21 @@
+<Window x:Class="WpfApp.Views.TelemetryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="LightGray"
+        Title="計測ログ" Height="400" Width="640">
+    <DockPanel Margin="12">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
+            <TextBlock Text="アプリの計測ログを表示します。計測ログクリアボタンで計測ログを全消去できます。※パスワードが必要です。" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+            <Button Content="計測ログクリア" Width="100" Click="Cleardb_Click" FontSize="14" Background="white"/>
+        </StackPanel>
+        <ListView ItemsSource="{Binding Readings}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="日時" DisplayMemberBinding="{Binding Timestamp}" Width="180"/>
+                    <GridViewColumn Header="装置名" DisplayMemberBinding="{Binding DeviceId}" Width="120"/>
+                    <GridViewColumn Header="計測値" DisplayMemberBinding="{Binding Value}" Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</Window>
