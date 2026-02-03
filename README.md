@@ -7,7 +7,7 @@
 より詳細な README（スクリーンショット・仕様書・使用技術・セットアップ手順など）は  
 以下のポートフォリオページにまとめています：
 
-👉 (https://fewioaghwrao.github.io/my-portfoliohogwhigrox/CCharp/docs/sensor-readme.html)
+👉 (https://fewioaghwrao.github.io/portfolio-client-view/CSharp/docs/sensor-readme.html)
 
 ## 🛠 主な機能
 - 仮想センサー（サイン波・ランダムウォーク）生成
