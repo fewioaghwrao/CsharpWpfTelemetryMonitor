@@ -5,13 +5,155 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp.Views"
         mc:Ignorable="d"
-        Background="LightGray"
-        Title="動作ログ" Height="400" Width="640">
-    <DockPanel Margin="12">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
-            <TextBlock Text="アプリの動作ログを表示します。ログクリアボタンでログを全消去できます。※パスワードが必要です。" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
-            <Button Content="ログクリア" Width="100" Click="ClearLogs_Click" FontSize="14" Background="white"/>
-        </StackPanel>
-        <ListView ItemsSource="{Binding LogLines}" Foreground="Black" Background="White" />
-    </DockPanel>
+        Title="動作ログ"
+        Height="520"
+        Width="820"
+        MinHeight="420"
+        MinWidth="640"
+        Background="#F3F4F6">
+
+    <Window.Resources>
+        <Style x:Key="DangerButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.92"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.84"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#F3F4F6"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F9FAFB"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E0F2FE"/>
+                    <Setter Property="Foreground" Value="#0F172A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Border Style="{StaticResource CardBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ヘッダー -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="動作ログ"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="#111827"/>
+                        <TextBlock Text="アプリの動作ログを表示します。必要に応じてログの確認やクリアを行ってください。"
+                                   Margin="0,6,0,0"
+                                   FontSize="13"
+                                   Foreground="#6B7280"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="ログクリア"
+                            Style="{StaticResource DangerButtonStyle}"
+                            VerticalAlignment="Top"
+                            Click="ClearLogs_Click"/>
+                </Grid>
+
+                <!-- 注意メッセージ -->
+                <Border Grid.Row="2"
+                        Background="#FEF3C7"
+                        BorderBrush="#FCD34D"
+                        BorderThickness="1"
+                        Padding="12">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚠"
+                                   FontSize="16"
+                                   Margin="0,0,8,0"
+                                   VerticalAlignment="Top"/>
+                        <TextBlock Text="ログクリアは全ログを削除する操作です。実行時にはパスワード認証が必要です。"
+                                   FontSize="13"
+                                   Foreground="#92400E"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ログ一覧 -->
+                <Grid Grid.Row="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="ログ一覧"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#374151"/>
+
+                    <Border Grid.Row="2"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"
+                            Background="White">
+                        <ListView ItemsSource="{Binding LogLines}"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                               TextWrapping="NoWrap"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

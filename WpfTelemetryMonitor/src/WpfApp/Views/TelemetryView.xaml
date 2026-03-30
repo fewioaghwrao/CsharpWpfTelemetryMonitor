@@ -1,21 +1,200 @@
 <Window x:Class="WpfApp.Views.TelemetryView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Background="LightGray"
-        Title="計測ログ" Height="400" Width="640">
-    <DockPanel Margin="12">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
-            <TextBlock Text="アプリの計測ログを表示します。計測ログクリアボタンで計測ログを全消去できます。※パスワードが必要です。" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
-            <Button Content="計測ログクリア" Width="100" Click="Cleardb_Click" FontSize="14" Background="white"/>
-        </StackPanel>
-        <ListView ItemsSource="{Binding Readings}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="日時" DisplayMemberBinding="{Binding Timestamp}" Width="180"/>
-                    <GridViewColumn Header="装置名" DisplayMemberBinding="{Binding DeviceId}" Width="120"/>
-                    <GridViewColumn Header="計測値" DisplayMemberBinding="{Binding Value}" Width="100"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </DockPanel>
+        Title="計測ログ"
+        Height="540"
+        Width="860"
+        MinHeight="420"
+        MinWidth="700"
+        Background="#F3F4F6">
+
+    <Window.Resources>
+        <!-- 危険操作ボタン -->
+        <Style x:Key="DangerButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.92"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.84"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- カード -->
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <!-- GridView ヘッダー -->
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Background" Value="#F9FAFB"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- 行 -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="BorderBrush" Value="#F3F4F6"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F9FAFB"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E0F2FE"/>
+                    <Setter Property="Foreground" Value="#0F172A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- セルのTextBlock共通 -->
+        <Style x:Key="CellTextStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Border Style="{StaticResource CardBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ヘッダー -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="計測ログ"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="#111827"/>
+                        <TextBlock Text="装置の計測データを一覧表示します。必要に応じて内容確認やクリアを行ってください。"
+                                   Margin="0,6,0,0"
+                                   FontSize="13"
+                                   Foreground="#6B7280"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="計測ログクリア"
+                            Style="{StaticResource DangerButtonStyle}"
+                            VerticalAlignment="Top"
+                            Click="Cleardb_Click"/>
+                </Grid>
+
+                <!-- 注意メッセージ -->
+                <Border Grid.Row="2"
+                        Background="#FEF3C7"
+                        BorderBrush="#FCD34D"
+                        BorderThickness="1"
+                        Padding="12">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚠"
+                                   FontSize="16"
+                                   Margin="0,0,8,0"
+                                   VerticalAlignment="Top"/>
+                        <TextBlock Text="計測ログクリアは保存済みの計測データを削除する操作です。実行時にはパスワード認証が必要です。"
+                                   FontSize="13"
+                                   Foreground="#92400E"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 一覧 -->
+                <Grid Grid.Row="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="計測データ一覧"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#374151"/>
+
+                    <Border Grid.Row="2"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"
+                            Background="White">
+                        <ListView ItemsSource="{Binding Readings}"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="日時" Width="220">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Timestamp}"
+                                                           Style="{StaticResource CellTextStyle}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="装置名" Width="180">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DeviceId}"
+                                                           Style="{StaticResource CellTextStyle}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="計測値" Width="140">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Value}"
+                                                           Style="{StaticResource CellTextStyle}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

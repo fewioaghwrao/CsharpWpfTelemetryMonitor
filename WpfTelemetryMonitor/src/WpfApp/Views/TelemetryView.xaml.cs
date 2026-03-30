@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using WpfApp.ViewModels;
 
@@ -10,13 +11,12 @@ namespace WpfApp.Views
             InitializeComponent();
             DataContext = new TelemetryViewModel();
         }
+
         private async void Cleardb_Click(object sender, RoutedEventArgs e)
         {
-            // パスワードダイアログ
             var dlg = new PasswordDialog { Owner = this };
             if (dlg.ShowDialog() != true) return;
 
-            // 期待パスワード（ddHH）※月日（MMdd）にしたい場合は "MMdd" に変えるだけ
             string expected = DateTime.Now.ToString("ddHH");
             if (!string.Equals(dlg.EnteredPassword, expected, StringComparison.Ordinal))
             {
@@ -34,9 +34,10 @@ namespace WpfApp.Views
 
             try
             {
-                  await vm.ClearDatabaseAsync();         // バックアップ＆クリア
-                   vm.ReloadFromDatabese(showAll: false); // 画面の一覧を空に（必要に応じて再読込）
-                MessageBox.Show(this, "ログをバックアップしてクリアしました。", "完了",
+                await vm.ClearDatabaseAsync();
+                vm.ReloadFromDatabese(showAll: false);
+
+                MessageBox.Show(this, "計測ログをバックアップしてクリアしました。", "完了",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

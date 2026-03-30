@@ -5,94 +5,431 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Background="LightGray"
-        Title="センサー監視シミュレーション" Height="540" Width="980">
+        Title="センサー監視シミュレーション"
+        Height="720"
+        Width="1240"
+        MinHeight="620"
+        MinWidth="980"
+        Background="#F3F6FB"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PageBackgroundBrush" Color="#F3F6FB"/>
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="CardBorderBrush" Color="#E5E7EB"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#111827"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7280"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#2563EB"/>
+        <SolidColorBrush x:Key="AccentBrushDark" Color="#1D4ED8"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+        <SolidColorBrush x:Key="DangerBrushDark" Color="#B91C1C"/>
+        <SolidColorBrush x:Key="SubtleBrush" Color="#F9FAFB"/>
+        <SolidColorBrush x:Key="ChipBrush" Color="#EEF2FF"/>
+        <SolidColorBrush x:Key="StatusChipBrush" Color="#ECFDF5"/>
+        <SolidColorBrush x:Key="StatusTextBrush" Color="#065F46"/>
+
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style x:Key="PageTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        </Style>
+
+        <Style x:Key="SectionTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        </Style>
+
+        <Style x:Key="SectionSubTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentBrushDark}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentBrushDark}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.55"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DangerBrushDark}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource DangerBrushDark}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.55"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F9FAFB"/>
+                    <Setter Property="BorderBrush" Value="#D1D5DB"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.55"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="InfoChipBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource ChipBrush}"/>
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="Padding" Value="12,7"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+
+        <Style x:Key="StatusChipBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource StatusChipBrush}"/>
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="Padding" Value="12,7"/>
+        </Style>
+
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#F3F4F6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="10,10"/>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="ItemBorder"
+                                Background="White"
+                                BorderBrush="#EEF2F7"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Padding="6">
+                            <GridViewRowPresenter VerticalAlignment="Center"
+                                                  Content="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#F9FBFF"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#D6E4FF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#EEF4FF"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#93C5FD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <DockPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="18,14,18,18">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="ファイル">
                     <MenuItem Header="エクスポート (CSV)"
-                          Command="{Binding ExportCsvCommand}"/>
+                              Command="{Binding ExportCsvCommand}"/>
+                    <Separator/>
                     <MenuItem Header="終了 (Alt+F4)"
-                  Command="ApplicationCommands.Close" />
+                              Command="ApplicationCommands.Close"/>
                 </MenuItem>
                 <MenuItem Header="表示">
-                    <MenuItem Header="設定" Click="OpenSettings_Click" />
-                    <MenuItem Header="動作ログ" Click="OpenLogs_Click" />
-                    <MenuItem Header="計測ログ" Click="OpenMeasureLogs_Click" />
+                    <MenuItem Header="設定" Click="OpenSettings_Click"/>
+                    <MenuItem Header="動作ログ" Click="OpenLogs_Click"/>
+                    <MenuItem Header="計測ログ" Click="OpenMeasureLogs_Click"/>
                 </MenuItem>
             </Menu>
 
-            <Grid Margin="16">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="18"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="16"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- 2カラム（左：リスト、右：グラフ） -->
-                <Grid Grid.Row="1">
+                <!-- ヘッダー -->
+                <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="24">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="センサー監視シミュレーション"
+                                       Style="{StaticResource PageTitleTextStyle}"/>
+                            <TextBlock Margin="0,6,0,0"
+                                       Text="仮想センサーの計測値を一覧とグラフでリアルタイム表示"
+                                       Style="{StaticResource SectionSubTextStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Border Style="{StaticResource InfoChipBorderStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="装置名 "
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="13"/>
+                                    <TextBlock Text="{Binding DeviceId}"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource InfoChipBorderStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="閾値 "
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="13"/>
+                                    <TextBlock Text="{Binding AlertThreshold}"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="開始"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Command="{Binding StartCommand}"
+                                    Margin="0,0,8,0"/>
+
+                            <Button Content="停止"
+                                    Style="{StaticResource DangerButtonStyle}"
+                                    Command="{Binding StopCommand}"
+                                    Margin="0,0,8,0"/>
+
+                            <Button x:Name="Explanation"
+                                    Content="概要説明(音声あり)"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Click="OnSpeakButtonClick"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- メイン -->
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- 左：コントロール群＋リスト -->
-                    <DockPanel Grid.Column="0" Margin="0,0,8,0">
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
-                            <TextBlock Text="装置名:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="14"/>
-                            <TextBlock Text="{Binding DeviceId}"  Width="80" FontWeight="Bold" Margin="0,0,16,0" VerticalAlignment="Center" Background="White" FontSize="14"/>
-                            <Button Content="開始" Width="80" Command="{Binding StartCommand}" Margin="0,0,8,0" Background="LightGreen" Foreground="Black" FontSize="14"/>
-                            <Button Content="停止" Width="80" Command="{Binding StopCommand}" Margin="0,0,8,0" Background="Red" Foreground="White" FontSize="14"/>
-                            <TextBlock Text="閾値:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="14"/>
-                            <TextBlock Text="{Binding AlertThreshold}" Width="50" FontWeight="Bold" Margin="0,0,16,0" VerticalAlignment="Center" Background="White" Foreground="Black" FontSize="14"/>
-                        </StackPanel>
+                    <!-- 左カード -->
+                    <Border Grid.Column="0"
+        Background="White"
+        BorderBrush="#E5E7EB"
+        BorderThickness="1"
+        CornerRadius="16"
+        Padding="16">
+                        <Border Background="#FCFDFE"
+            BorderBrush="#EEF2F7"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="8">
+                            <ListView ItemsSource="{Binding Readings}"
+                  MaxHeight="360"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.CanContentScroll="True"
+                  BorderThickness="0"
+                  Background="Transparent">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn Header="日時"
+                                    Width="190"
+                                    DisplayMemberBinding="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm:ss}"/>
+                                        <GridViewColumn Header="計測値"
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding Value, StringFormat={}{0:F2}}"/>
+                                        <GridViewColumn Header="装置名"
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding DeviceId}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Border>
+                    </Border>
 
-                        <ListView ItemsSource="{Binding Readings}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="日時"
-                                    DisplayMemberBinding="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="180"/>
-                                    <GridViewColumn Header="計測値"
-                                    DisplayMemberBinding="{Binding Value, StringFormat={}{0:F2}}" Width="100"/>
-                                    <GridViewColumn Header="装置名"
-                                    DisplayMemberBinding="{Binding DeviceId}" Width="120"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </DockPanel>
+                    <!-- 右カード -->
+                    <Border Grid.Column="2"
+                            Background="White"
+                            BorderBrush="#E5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="16"
+                            Padding="16">
+                        <DockPanel LastChildFill="True">
+                            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12" LastChildFill="False">
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock Text="トレンドグラフ"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Foreground="#111827"/>
+                                    <TextBlock Text="横軸: 時間（直近100秒） / 縦軸: 計測値"
+                                               Margin="0,4,0,0"
+                                               FontSize="13"
+                                               Foreground="#6B7280"/>
+                                </StackPanel>
 
-                    <!-- 右：OxyPlot -->
-                    <DockPanel Grid.Column="1" Margin="0,0,8,0">
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
-                            <TextBlock Text="{Binding Status}" VerticalAlignment="Center" FontStyle="Italic" 
-                                   Background="Black" Foreground="White" Margin="0,0,8,0" FontSize="14"
-                                    Width="350"/>
-                            <Button x:Name="Explanation" Content="概要説明(音声あり)" Width="100"  Click="OnSpeakButtonClick" Margin="0,0,8,0" Background="Blue" Foreground="white" FontSize="10"/>
-                        </StackPanel>
-                        <oxy:PlotView Model="{Binding PlotModel}" />
-                    </DockPanel>
+                                <Border DockPanel.Dock="Right"
+                                        Background="#ECFDF5"
+                                        CornerRadius="999"
+                                        Padding="12,6">
+                                    <TextBlock Text="{Binding Status}"
+                                               Foreground="#065F46"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"/>
+                                </Border>
+                            </DockPanel>
+
+                            <Border Background="#FCFDFE"
+        BorderBrush="#EEF2F7"
+        BorderThickness="1"
+        CornerRadius="12"
+        Padding="10"
+        MinHeight="280"
+        MinWidth="320">
+                                <oxy:PlotView Model="{Binding PlotModel}" />
+                            </Border>
+                        </DockPanel>
+                    </Border>
                 </Grid>
 
-                <!-- 下部ステータス -->
-                <TextBlock Grid.Row="2" Text="2025" FontStyle="Italic" Background="Transparent" Foreground="Black"/>
+                <!-- フッター -->
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="稼働状況をリアルタイムで監視"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               FontSize="12"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1"
+                               Text="© 2026 Telemetry Monitor"
+                               Foreground="#9CA3AF"
+                               FontSize="12"
+                               VerticalAlignment="Center"/>
+                </Grid>
             </Grid>
         </DockPanel>
-        <TextBlock x:Name="OverlayLabel"
-               Text="センサー監視シミュレーションの概要&#x0D;&#x0A;こちらは1秒ごとの仮想の計測値を左にリストアップし、&#x0D;&#x0A;右のグラフにてプロットするものとなっております。&#x0D;&#x0A;開始ボタンでサンプリング開始、停止ボタンでサンプリング停止となります。&#x0D;&#x0A;左のリストには計測した日時、計測値、装置名がリストアップされます。&#x0D;&#x0A;右のグラフの横軸は時間、縦軸は計測値で最近の１００秒間の値を表示します。&#x0D;&#x0A;グラフの赤色は閾値、青色は計測値となります。"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Top"
-               Margin="0,105,0,0"
-               Padding="8,4"
-               Background="#AA000000"
-               Foreground="White"
-               FontWeight="Bold"
-               Panel.ZIndex="10"
-               Visibility="Collapsed"
-                   FontSize="20"
-               IsHitTestVisible="False"/>
 
+        <!-- 全体オーバーレイ -->
+        <Grid x:Name="OverlayPanel"
+              Panel.ZIndex="9"
+              Visibility="Collapsed">
+            <Border Background="#66000000"/>
+
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="32"
+                    MaxWidth="920"
+                    Background="#F9FAFB"
+                    CornerRadius="18"
+                    Padding="28"
+                    BorderBrush="#D1D5DB"
+                    BorderThickness="1"
+                    IsHitTestVisible="False">
+                <StackPanel>
+                    <TextBlock Text="概要説明"
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               Foreground="#111827"
+                               Margin="0,0,0,14"/>
+
+                    <TextBlock x:Name="OverlayLabel"
+                               Text="センサー監視シミュレーションの概要&#x0D;&#x0A;こちらは1秒ごとの仮想の計測値を左にリストアップし、&#x0D;&#x0A;右のグラフにてプロットするものとなっております。&#x0D;&#x0A;開始ボタンでサンプリング開始、停止ボタンでサンプリング停止となります。&#x0D;&#x0A;左のリストには計測した日時、計測値、装置名がリストアップされます。&#x0D;&#x0A;右のグラフの横軸は時間、縦軸は計測値で最近の１００秒間の値を表示します。&#x0D;&#x0A;グラフの赤色は閾値、青色は計測値となります。"
+                               Foreground="#1F2937"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               Visibility="Visible"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
-
-

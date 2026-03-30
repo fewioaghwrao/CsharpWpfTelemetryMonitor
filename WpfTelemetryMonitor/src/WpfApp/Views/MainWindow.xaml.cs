@@ -180,8 +180,9 @@ namespace WpfApp.Views
             }
         }
 
-        private void ExplanationAPP(string text1, string text2, string text3) {
-            OverlayLabel.Visibility = Visibility.Visible;
+        private void ExplanationAPP(string text1, string text2, string text3)
+        {
+            OverlayPanel.Visibility = Visibility.Visible;
             Explanation.IsEnabled = false;
             _duringSpeak = true;
             _pendingPrompts = 3;
@@ -189,13 +190,14 @@ namespace WpfApp.Views
             _synth.SpeakAsync(text2);
             _synth.SpeakAsync(text3);
         }
+
         private void Synth_SpeakCompleted(object? sender, SpeakCompletedEventArgs e)
         {
             if (Interlocked.Decrement(ref _pendingPrompts) <= 0)
             {
                 Dispatcher.Invoke(() =>
                 {
-                    OverlayLabel.Visibility = Visibility.Collapsed;
+                    OverlayPanel.Visibility = Visibility.Collapsed;
                     _duringSpeak = false;
                     Explanation.IsEnabled = true;
                 });
