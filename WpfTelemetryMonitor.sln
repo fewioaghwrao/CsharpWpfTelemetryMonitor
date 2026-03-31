@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp.Tests", "WpfApp.Tests\WpfApp.Tests.csproj", "{19ACCC2A-25A8-4814-AA74-0514AED73A71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{FD74E5CC-DA4E-4F75-BBDB-E776B035A163}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD74E5CC-DA4E-4F75-BBDB-E776B035A163}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD74E5CC-DA4E-4F75-BBDB-E776B035A163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19ACCC2A-25A8-4814-AA74-0514AED73A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19ACCC2A-25A8-4814-AA74-0514AED73A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19ACCC2A-25A8-4814-AA74-0514AED73A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19ACCC2A-25A8-4814-AA74-0514AED73A71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
